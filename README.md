@@ -36,3 +36,6 @@ Export backup first. Replace app files on the SAME host/path; bump the CACHE str
 Keep app open and screen unlocked during sessions. Local storage can be evicted or cleared; there is no cloud sync. PIN is not strong security. Browser speech varies. Partial retries start a fresh guided session. All exercise increases require parent review. Session length depends on comfortable repetition pace; never rush to hit a duration.
 
 Publishing is pending account choice and approval. No public URL exists for this candidate.
+
+## Audio diagnostic update — release 5
+Explicit Test voice control, local English voice preference, retained utterance, paused-engine resume, and visible start/error/timeout status. Mock-engine tests passed for these paths. This is a candidate fix, not confirmed audible on iPhone. Upload speech.js in addition to the existing files. Keep the same URL and local storage. No data reset required.
