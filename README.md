@@ -42,3 +42,6 @@ Explicit Test voice control, local English voice preference, retained utterance,
 
 ## Voice selection update — release 6
 Adds English voice selection with preview and remembered device-local preference. Automatic selection prefers voices labeled Premium/Enhanced when exposed by the browser. Uses normal speaking rate. Manual selection falls back to automatic if unavailable. Voice availability/quality is device-dependent; no claim of natural voice quality until previewed on the physical phone. Silent Mode must be off on the tested parent iPhone. Tests passed for selection, fallback and asynchronously updated voice lists.
+
+## Update activation — release 7
+Service worker fetches a fresh complete shell before skipWaiting, then claims clients. Does not reload a running workout or alter localStorage. Reopen/reload after activation to display new controls. Lifecycle mock test passed; physical iPhone update still needs confirmation.
