@@ -11,8 +11,8 @@ const bugA=pose([72,165],[102,164],[190,164],[72,146],[36,133],[190,112],[245,11
 const bugB=pose([72,165],[102,164],[190,164],[103,123],[104,84],[240,160],[292,166],[72,146],[36,133],[201,112],[256,112]);
 const kneePlank=pose([87,104],[115,120],[202,145],[115,180],[73,180],[245,180],[293,165],[126,180],[84,180],[251,180],[299,165]);
 const plank=pose([87,104],[115,120],[202,149],[115,180],[73,180],[245,165],[291,180],[126,180],[84,180],[251,165],[300,180]);
-const sideLow=pose([93,93],[120,116],[186,163],[120,180],[158,180],[245,180],[285,164],[147,123],[185,155],[250,176],[288,161]);
-const sideHigh=pose([93,70],[120,94],[186,135],[120,180],[158,180],[245,180],[285,164],[149,107],[186,135],[250,176],[288,161]);
+const sideLow=pose([97,102],[121,120],[216,173],[111,180],[72,195],[285,178],[310,123],[180,65],[228,141],[295,168],[320,113]);
+const sideHigh=pose([97,102],[121,120],[216,154],[111,180],[72,195],[285,178],[310,123],[180,65],[228,122],[295,168],[320,113]);
 const frames=(a,b,cues)=>[[0,a,cues[0]],[.18,b,cues[1]],[.42,b,cues[1]],[.6,a,cues[2]],[1,a,cues[0]]];
 const alternate=(a,b,c)=>[[0,a,'Set up with control'],[.2,b,'Opposite arm + leg'],[.35,b,'Stay steady; breathe'],[.5,a,'Return with control'],[.7,c,'Switch arm + leg'],[.85,c,'Stay steady; breathe'],[1,a,'Return with control']];
 const guides={
@@ -23,7 +23,7 @@ const guides={
  plank:{title:'Forearm plank',view:'Side view · setup, hold, release',seconds:10,hold:true,cues:['Elbows under shoulders; hands extend toward your head. Begin with knees down.','Lift knees to make a straight line from head to heels.','Hold steady and breathe. Lower knees if your back sags.'],frames:[[0,kneePlank,'Begin with knees down'],[.2,plank,'Hold steady · keep breathing'],[.75,plank,'Hold steady · keep breathing'],[.9,kneePlank,'Lower knees gently'],[1,kneePlank,'Begin with knees down']]},
  bug:{title:'Dead bug',view:'Side view · teal shows the far side',seconds:10,cues:['Lie on your back, arms up, hips and knees bent.','Reach one arm back and the opposite heel away.','Keep your back comfortable and steady. Shorten the reach if it arches.'],frames:alternate(bug,bugA,bugB)},
  balance:{title:'Single-leg balance',view:'Side view · fingertip support',seconds:12,hold:true,prop:'support',cues:['Stand beside a fixed counter, with fingertips nearby.','Lift one foot a little; keep the standing knee soft.','Stay tall and breathe. Set down gently and change legs when prompted.'],frames:[[0,stand,'Stand near support'],[.16,pose([173,32],[175,58],[175,118],[143,75],[112,90],[174,148],[174,180],[186,85],[190,112],[208,143],[205,164]),'Lift one foot slightly'],[.43,pose([173,32],[175,58],[175,118],[143,75],[112,90],[174,148],[174,180],[186,85],[190,112],[208,143],[205,164]),'Hold steady · use support'],[.5,stand,'Set down gently'],[.66,pose([173,32],[175,58],[175,118],[143,75],[112,90],[205,143],[202,164],[186,85],[190,112],[185,148],[187,180]),'Example on the other leg'],[.93,pose([173,32],[175,58],[175,118],[143,75],[112,90],[205,143],[202,164],[186,85],[190,112],[185,148],[187,180]),'Hold steady · use support'],[1,stand,'Set down gently']]},
- side:{title:'Side plank from knees',view:'Side view · bent knees stay on mat',seconds:10,hold:true,cues:['Lie on your side with knees bent and elbow under shoulder.','Lift hips so shoulder, hip, and knee make one line.','Breathe normally. Lower gently; repeat on your other side when prompted.'],frames:[[0,sideLow,'Elbow under shoulder'],[.2,sideHigh,'Lift hips · knees stay down'],[.75,sideHigh,'Hold steady · keep breathing'],[.95,sideLow,'Lower gently'],[1,sideLow,'Elbow under shoulder']]},
+ side:{title:'Side plank from knees',view:'Front angle · bottom forearm + stacked knees',seconds:10,hold:true,cues:['Stack your bent knees; both shins angle behind you.','Place the bottom elbow under your shoulder; rest the free hand on your hip.','Lift hips once and hold a straight shoulder-to-knee line. Breathe, then lower gently.'],frames:[[0,sideLow,'Elbow under shoulder'],[.2,sideHigh,'Lift hips · knees stay down'],[.75,sideHigh,'Hold steady · keep breathing'],[.95,sideLow,'Lower gently'],[1,sideLow,'Elbow under shoulder']]},
  lunge:{title:'Reverse lunge',view:'Side view · short comfortable step',seconds:10,cues:['Stand tall; use a fixed support beside you if needed.','Step one foot back and bend both knees comfortably.','Press through the front foot to return. Alternate legs.'],frames:[[0,stand,'Stand tall'],[.2,pose([173,62],[175,88],[175,138],[168,115],[165,140],[214,143],[219,180],[186,115],[190,140],[135,171],[101,180]),'Step back · bend gently'],[.35,pose([173,62],[175,88],[175,138],[168,115],[165,140],[214,143],[219,180],[186,115],[190,140],[135,171],[101,180]),'Front heel stays down'],[.5,stand,'Return to standing'],[.7,pose([173,62],[175,88],[175,138],[168,115],[165,140],[135,171],[101,180],[186,115],[190,140],[214,143],[219,180]),'Repeat with the other leg'],[.85,pose([173,62],[175,88],[175,138],[168,115],[165,140],[135,171],[101,180],[186,115],[190,140],[214,143],[219,180]),'Use a comfortable depth'],[1,stand,'Return to standing']]}
 };
 // Explicit orientation accompanies the drawing so a silhouette is never the only cue.
@@ -35,7 +35,7 @@ const orientations={
  plank:{orientation:'FACE DOWN · NOT ON YOUR BACK',setup:'Lie on your tummy first. Put forearms on the mat, elbows below shoulders. Lift tummy and knees; support yourself on forearms and toes. Look down.',face:[-.25,.97]},
  bug:{orientation:'FACE UP · ON YOUR BACK',setup:'Your back rests on the mat. Face and chest point toward the ceiling.',face:[0,-1]},
  balance:{orientation:'STANDING · LOOK FORWARD',setup:'Stand upright beside a fixed support. Look straight ahead.',face:[-1,0]},
- side:{orientation:'ON YOUR SIDE · NOT FACE DOWN',setup:'Lie on your side with knees bent. Face and chest point toward the viewer in this drawing.',face:[0,0]},
+ side:{orientation:'ON YOUR SIDE · KNEES BENT AND STACKED',setup:'Face and chest point toward you in this front-angle drawing. Only the bottom forearm and the sides of your bent legs support you. The free hand rests on your hip.',face:[0,0]},
  lunge:{orientation:'STANDING · LOOK FORWARD',setup:'Stand upright. The drawing shows a side view of your steps.',face:[-1,0]}
 };
 for(const [id,details] of Object.entries(orientations))Object.assign(guides[id],details);
@@ -48,17 +48,29 @@ function mount(container,exercise){const guide=find(exercise);container.replaceC
  const setup=document.createElement('p');setup.className='demo-setup';setup.textContent=guide.setup;container.append(setup);
  const svg=el('svg',{viewBox:'0 0 360 240',role:'img','aria-label':guide.title+'. '+guide.orientation+'. '+guide.setup+' '+guide.cues.join(' ')},container);
  const title=el('title',{},svg);title.textContent=guide.title+' — animated form guide';
- el('rect',{x:0,y:0,width:360,height:240,rx:16,fill:'#f0f7f5'},svg);el('rect',{x:24,y:185,width:312,height:12,rx:6,fill:'#8bb7a6'},svg);
+ el('rect',{x:0,y:0,width:360,height:240,rx:16,fill:'#f0f7f5'},svg);if(guide===guides.side){el('polygon',{points:'24,192 328,116 352,160 48,236',fill:'#b8d8c7',stroke:'#739d88','stroke-width':1.5},svg)}else el('rect',{x:24,y:185,width:312,height:12,rx:6,fill:'#8bb7a6'},svg);
  const floorText=el('text',{x:330,y:227,'text-anchor':'end',fill:'#37594e','font-size':12,'font-weight':700},svg);floorText.textContent='MAT / FLOOR';
  if(guide.prop==='counter')el('path',{d:'M25 112 H108 M35 112 V185 M95 112 V185',stroke:'#80959d','stroke-width':7,fill:'none','stroke-linecap':'round'},svg);
  if(guide.prop==='support')el('path',{d:'M62 92 H115 M72 92 V185 M105 92 V185',stroke:'#80959d','stroke-width':6,fill:'none','stroke-linecap':'round'},svg);
  const farArm=el('polyline',{'stroke':'#32897e','stroke-width':9,fill:'none','stroke-linejoin':'round','stroke-linecap':'round'},svg),farLeg=el('polyline',{'stroke':'#32897e','stroke-width':11,fill:'none','stroke-linejoin':'round','stroke-linecap':'round'},svg);
  const trunk=el('line',{stroke:'#214663','stroke-width':19,'stroke-linecap':'round'},svg),neck=el('line',{stroke:'#214663','stroke-width':8,'stroke-linecap':'round'},svg);
+ let sideShirt=null,sideShorts=null;
+ if(guide===guides.side){
+  trunk.setAttribute('visibility','hidden');farArm.setAttribute('stroke','#be8969');farArm.setAttribute('stroke-width',12);farLeg.setAttribute('stroke','#be8969');farLeg.setAttribute('stroke-width',14);
+  sideShirt=el('polygon',{fill:'#52799b',stroke:'#214663','stroke-width':1.5,'stroke-linejoin':'round'},svg);
+  sideShorts=el('polygon',{fill:'#263d56',stroke:'#163852','stroke-width':1.5,'stroke-linejoin':'round'},svg);
+ }
  const arm=el('polyline',{'stroke':'#163852','stroke-width':9,fill:'none','stroke-linejoin':'round','stroke-linecap':'round'},svg),leg=el('polyline',{'stroke':'#163852','stroke-width':11,fill:'none','stroke-linejoin':'round','stroke-linecap':'round'},svg),head=el('circle',{r:13,fill:'#e3b68f',stroke:'#214663','stroke-width':2},svg);
+ if(guide===guides.side){arm.setAttribute('stroke','#e3b68f');arm.setAttribute('stroke-width',12);leg.setAttribute('stroke','#e3b68f');leg.setAttribute('stroke-width',14)}
  const nose=el('path',{fill:'#e3b68f',stroke:'#214663','stroke-width':1.5},svg),eye=el('circle',{r:2,fill:'#10243a'},svg),secondEye=el('circle',{r:2,fill:'#10243a'},svg),hair=el('path',{stroke:'#654d3f','stroke-width':4,fill:'none','stroke-linecap':'round'},svg);
  const mouth=el('path',{stroke:'#654d3f','stroke-width':1.5,fill:'none','stroke-linecap':'round'},svg);
  const chest=el('circle',{r:4,fill:'#83d0b1'},svg);
  let contactLabels=[];
+ if(guide===guides.side){
+ for(const [label,x,y,tx,ty] of [['BOTTOM FOREARM',77,216,90,188],['STACKED KNEES',280,215,285,180],['BENT SHINS',296,90,310,129]]){
+  el('path',{d:'M'+x+' '+(y-8)+' L'+tx+' '+ty,stroke:'#325b4f','stroke-width':1.2},svg);const t=el('text',{x,y,'text-anchor':'middle',fill:'#1c5140','font-size':10,'font-weight':800},svg);t.textContent=label;
+ }
+ }
  if(guide===guides.plank){
   for(const [label,x,anchorX] of [['FOREARMS',95,95],['TOES',300,296]]){
    const leader=el('path',{d:'M'+anchorX+' 190 V201',stroke:'#325b4f','stroke-width':1.5},svg);
@@ -67,11 +79,12 @@ function mount(container,exercise){const guide=find(exercise);container.replaceC
  }
  const text=document.createElement('p');text.className='demo-caption';container.append(text);let raf=null,elapsed=0,last=null,running=false;
  function draw(){const f=sample(guide,(elapsed/1000/guide.seconds)%1),p=f.points;[[farArm,[1,7,8]],[farLeg,[2,9,10]],[arm,[1,3,4]],[leg,[2,5,6]]].forEach(([node,indices])=>node.setAttribute('points',indices.map(i=>p[i].join(',')).join(' ')));[[trunk,1,2],[neck,0,1]].forEach(([node,a,b])=>{node.setAttribute('x1',p[a][0]);node.setAttribute('y1',p[a][1]);node.setAttribute('x2',p[b][0]);node.setAttribute('y2',p[b][1])});head.setAttribute('cx',p[0][0]);head.setAttribute('cy',p[0][1]);
+ if(sideShirt){const shoulder=p[1],hip=p[2],topShoulder=[shoulder[0]+14,shoulder[1]-32],topHip=[hip[0]+12,hip[1]-32];sideShirt.setAttribute('points',[shoulder,topShoulder,topHip,hip].map(p=>p.join(',')).join(' '));const hem=[hip[0]+(p[5][0]-hip[0])*.38,hip[1]+(p[5][1]-hip[1])*.38];sideShorts.setAttribute('points',[hip,topHip,[hem[0]+12,hem[1]-27],hem].map(p=>p.join(',')).join(' '));leg.setAttribute('points',[hem,p[5],p[6]].map(p=>p.join(',')).join(' '));const farHip=[hip[0]+10,hip[1]-10],farHem=[farHip[0]+(p[9][0]-farHip[0])*.38,farHip[1]+(p[9][1]-farHip[1])*.38];farLeg.setAttribute('points',[farHem,p[9],p[10]].map(p=>p.join(',')).join(' '));farArm.setAttribute('points',[topShoulder,p[7],topHip].map(p=>p.join(',')).join(' '));}
  const h=p[0],v=guide.face,front=guide===guides.side,perp=[-v[1],v[0]];
  const point=(forward,side)=>[h[0]+v[0]*forward+perp[0]*side,h[1]+v[1]*forward+perp[1]*side];
  if(front){nose.setAttribute('d','M'+(h[0]-1)+' '+(h[1]-1)+' l-2 5 h5');eye.setAttribute('cx',h[0]-5);eye.setAttribute('cy',h[1]-3);secondEye.setAttribute('cx',h[0]+5);secondEye.setAttribute('cy',h[1]-3);secondEye.setAttribute('visibility','visible');hair.setAttribute('d','M'+(h[0]-10)+' '+(h[1]-8)+' Q'+h[0]+' '+(h[1]-18)+' '+(h[0]+10)+' '+(h[1]-8));mouth.setAttribute('d','M'+(h[0]-4)+' '+(h[1]+7)+' q4 3 8 0')}
  else{nose.setAttribute('d','M'+point(10,-4).join(' ')+' L'+point(18,0).join(' ')+' L'+point(10,4).join(' '));const e=point(7,-4);eye.setAttribute('cx',e[0]);eye.setAttribute('cy',e[1]);secondEye.setAttribute('visibility','hidden');hair.setAttribute('d','M'+point(-2,-12).join(' ')+' Q'+point(-20,0).join(' ')+' '+point(-2,12).join(' '));mouth.setAttribute('d','M'+point(10,6).join(' ')+' L'+point(8,9).join(' '))}
- const chestVector=front?[0,1]:v;chest.setAttribute('cx',p[1][0]+(p[2][0]-p[1][0])*.25+chestVector[0]*8);chest.setAttribute('cy',p[1][1]+(p[2][1]-p[1][1])*.25+chestVector[1]*8);
+ if(front)chest.setAttribute('visibility','hidden');const chestVector=front?[0,1]:v;chest.setAttribute('cx',p[1][0]+(p[2][0]-p[1][0])*.25+chestVector[0]*8);chest.setAttribute('cy',p[1][1]+(p[2][1]-p[1][1])*.25+chestVector[1]*8);
  if(contactLabels.length){const kneesDown=p[5][1]>176,x=kneesDown?p[5][0]:296;contactLabels[1].text.textContent=kneesDown?'KNEES DOWN':'TOES';contactLabels[1].text.setAttribute('x',x);contactLabels[1].leader.setAttribute('d','M'+x+' 190 V201')}
  text.textContent=f.caption}
  function tick(now){if(!running)return;if(last!==null)elapsed+=Math.min(now-last,100);last=now;draw();raf=requestAnimationFrame(tick)}
