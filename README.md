@@ -1,5 +1,5 @@
 # Ryan Strength — animated demonstrations update
-Prepared November 10, 2026 · app-shell release 9
+Prepared November 10, 2026 · app-shell release 10
 
 ## What changed
 - Original looping vector animations for all eight movements in the established beginner plans: incline push-ups, bird dogs, easy squats, forearm plank, dead bugs, single-leg balance, side plank from knees, and reverse lunges. A floor push-up example is also available for an explicitly named floor push-up exercise.
@@ -58,3 +58,6 @@ These references inform movement cues, not the child's prescribed sets/reps.
 
 ## Ongoing limits
 An adult supervises youth sessions. Keep the app open during a workout. Timers pause when backgrounded; no background audio/timer promise. Spoken voice quality is limited to the voices exposed by the phone; on the tested parent phone, Silent Mode must be off. Storage can be cleared or evicted; retain JSON backups. The parent PIN is a casual gate, not strong security. A retry of a partial session starts a fresh guided flow. There is no App Store/watchOS app or automatic cloud sync.
+
+## Orientation revision — release 10
+Parent feedback: the initial simple silhouettes did not make face-up versus face-down position clear enough. Added visible eyes, nose, mouth, and hair to every figure; explicit orientation and setup text; a thick labeled mat; and forearm/knee/toe contact labels for forearm planks. Kept the preview/start workflow, targets, timers, storage keys, and backup schema unchanged. Full regression tests passed again; revised face-up/face-down drawings inspected in Chrome. This revision still needs parent and physical-iPhone review before use. Only demos.js, style.css, sw.js and this README differ from release 9; uploading all 12 app files is supported.

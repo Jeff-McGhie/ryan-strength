@@ -1,4 +1,4 @@
-const CACHE='ryan-strength-release-9';const ASSETS=['./','./index.html','./style.css','./core.js','./app.js','./speech.js','./demos.js','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+const CACHE='ryan-strength-release-10';const ASSETS=['./','./index.html','./style.css','./core.js','./app.js','./speech.js','./demos.js','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS.map(url=>new Request(url,{cache:'reload'})))).then(()=>self.skipWaiting())));
 self.addEventListener('activate', event => {
  event.waitUntil((async () => {

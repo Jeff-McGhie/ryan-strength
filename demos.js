@@ -26,21 +26,54 @@ const guides={
  side:{title:'Side plank from knees',view:'Side view · bent knees stay on mat',seconds:10,hold:true,cues:['Lie on your side with knees bent and elbow under shoulder.','Lift hips so shoulder, hip, and knee make one line.','Breathe normally. Lower gently; repeat on your other side when prompted.'],frames:[[0,sideLow,'Elbow under shoulder'],[.2,sideHigh,'Lift hips · knees stay down'],[.75,sideHigh,'Hold steady · keep breathing'],[.95,sideLow,'Lower gently'],[1,sideLow,'Elbow under shoulder']]},
  lunge:{title:'Reverse lunge',view:'Side view · short comfortable step',seconds:10,cues:['Stand tall; use a fixed support beside you if needed.','Step one foot back and bend both knees comfortably.','Press through the front foot to return. Alternate legs.'],frames:[[0,stand,'Stand tall'],[.2,pose([173,62],[175,88],[175,138],[168,115],[165,140],[214,143],[219,180],[186,115],[190,140],[135,171],[101,180]),'Step back · bend gently'],[.35,pose([173,62],[175,88],[175,138],[168,115],[165,140],[214,143],[219,180],[186,115],[190,140],[135,171],[101,180]),'Front heel stays down'],[.5,stand,'Return to standing'],[.7,pose([173,62],[175,88],[175,138],[168,115],[165,140],[135,171],[101,180],[186,115],[190,140],[214,143],[219,180]),'Repeat with the other leg'],[.85,pose([173,62],[175,88],[175,138],[168,115],[165,140],[135,171],[101,180],[186,115],[190,140],[214,143],[219,180]),'Use a comfortable depth'],[1,stand,'Return to standing']]}
 };
+// Explicit orientation accompanies the drawing so a silhouette is never the only cue.
+const orientations={
+ incline:{orientation:'FACE TOWARD COUNTER',setup:'Chest faces the counter. Your back faces the ceiling.',face:[-.7,.72]},
+ floor:{orientation:'FACE DOWN',setup:'Chest and face point toward the floor. Your back faces the ceiling.',face:[-.25,.97]},
+ bird:{orientation:'FACE DOWN · ON HANDS AND KNEES',setup:'Look down between your hands. Your back faces the ceiling.',face:[-.35,.94]},
+ squat:{orientation:'STANDING · LOOK FORWARD',setup:'Stand upright. The drawing shows you from the side.',face:[-1,0]},
+ plank:{orientation:'FACE DOWN · NOT ON YOUR BACK',setup:'Lie on your tummy first. Put forearms on the mat, elbows below shoulders. Lift tummy and knees; support yourself on forearms and toes. Look down.',face:[-.25,.97]},
+ bug:{orientation:'FACE UP · ON YOUR BACK',setup:'Your back rests on the mat. Face and chest point toward the ceiling.',face:[0,-1]},
+ balance:{orientation:'STANDING · LOOK FORWARD',setup:'Stand upright beside a fixed support. Look straight ahead.',face:[-1,0]},
+ side:{orientation:'ON YOUR SIDE · NOT FACE DOWN',setup:'Lie on your side with knees bent. Face and chest point toward the viewer in this drawing.',face:[0,0]},
+ lunge:{orientation:'STANDING · LOOK FORWARD',setup:'Stand upright. The drawing shows a side view of your steps.',face:[-1,0]}
+};
+for(const [id,details] of Object.entries(orientations))Object.assign(guides[id],details);
 const names={'incline push-ups':'incline','incline or floor push-ups':'incline','floor push-ups':'floor','bird dogs':'bird','bird dog':'bird','bodyweight squats':'squat','easy squats':'squat','forearm plank':'plank','dead bugs':'bug','dead bug':'bug','single-leg balance':'balance','side plank from knees':'side','reverse lunges':'lunge'};
 function find(exercise){return guides[names[String(exercise.name).trim().toLowerCase()]]||null}
 function sample(guide,progress){const t=Math.max(0,Math.min(1,progress));let i=0;while(i<guide.frames.length-2&&t>=guide.frames[i+1][0])i++;const a=guide.frames[i],b=guide.frames[i+1],u=(t-a[0])/(b[0]-a[0]),ease=u*u*(3-2*u);return {points:a[1].map((p,j)=>p.map((v,k)=>v+(b[1][j][k]-v)*ease)),caption:a[2]}}
 function mount(container,exercise){const guide=find(exercise);container.replaceChildren();if(!guide)return null;const NS='http://www.w3.org/2000/svg';
  function el(tag,attrs,parent){const node=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>node.setAttribute(k,v));parent.append(node);return node}
- const svg=el('svg',{viewBox:'0 0 360 210',role:'img','aria-label':guide.title+' movement demonstration. '+guide.cues.join(' ')},container);
+ const orientation=document.createElement('p');orientation.className='demo-orientation';orientation.textContent=guide.orientation;container.append(orientation);
+ const setup=document.createElement('p');setup.className='demo-setup';setup.textContent=guide.setup;container.append(setup);
+ const svg=el('svg',{viewBox:'0 0 360 240',role:'img','aria-label':guide.title+'. '+guide.orientation+'. '+guide.setup+' '+guide.cues.join(' ')},container);
  const title=el('title',{},svg);title.textContent=guide.title+' — animated form guide';
- el('rect',{x:0,y:0,width:360,height:210,rx:16,fill:'#f0f7f5'},svg);el('path',{d:'M25 187 H335',stroke:'#a4bdb6','stroke-width':2},svg);
+ el('rect',{x:0,y:0,width:360,height:240,rx:16,fill:'#f0f7f5'},svg);el('rect',{x:24,y:185,width:312,height:12,rx:6,fill:'#8bb7a6'},svg);
+ const floorText=el('text',{x:330,y:227,'text-anchor':'end',fill:'#37594e','font-size':12,'font-weight':700},svg);floorText.textContent='MAT / FLOOR';
  if(guide.prop==='counter')el('path',{d:'M25 112 H108 M35 112 V185 M95 112 V185',stroke:'#80959d','stroke-width':7,fill:'none','stroke-linecap':'round'},svg);
  if(guide.prop==='support')el('path',{d:'M62 92 H115 M72 92 V185 M105 92 V185',stroke:'#80959d','stroke-width':6,fill:'none','stroke-linecap':'round'},svg);
  const farArm=el('polyline',{'stroke':'#32897e','stroke-width':9,fill:'none','stroke-linejoin':'round','stroke-linecap':'round'},svg),farLeg=el('polyline',{'stroke':'#32897e','stroke-width':11,fill:'none','stroke-linejoin':'round','stroke-linecap':'round'},svg);
  const trunk=el('line',{stroke:'#214663','stroke-width':19,'stroke-linecap':'round'},svg),neck=el('line',{stroke:'#214663','stroke-width':8,'stroke-linecap':'round'},svg);
  const arm=el('polyline',{'stroke':'#163852','stroke-width':9,fill:'none','stroke-linejoin':'round','stroke-linecap':'round'},svg),leg=el('polyline',{'stroke':'#163852','stroke-width':11,fill:'none','stroke-linejoin':'round','stroke-linecap':'round'},svg),head=el('circle',{r:13,fill:'#e3b68f',stroke:'#214663','stroke-width':2},svg);
+ const nose=el('path',{fill:'#e3b68f',stroke:'#214663','stroke-width':1.5},svg),eye=el('circle',{r:2,fill:'#10243a'},svg),secondEye=el('circle',{r:2,fill:'#10243a'},svg),hair=el('path',{stroke:'#654d3f','stroke-width':4,fill:'none','stroke-linecap':'round'},svg);
+ const mouth=el('path',{stroke:'#654d3f','stroke-width':1.5,fill:'none','stroke-linecap':'round'},svg);
+ const chest=el('circle',{r:4,fill:'#83d0b1'},svg);
+ let contactLabels=[];
+ if(guide===guides.plank){
+  for(const [label,x,anchorX] of [['FOREARMS',126,126],['TOES',300,296]]){
+   const leader=el('path',{d:'M'+anchorX+' 190 V201',stroke:'#325b4f','stroke-width':1.5},svg);
+   const t=el('text',{x,y:214,'text-anchor':'middle',fill:'#1c5140','font-size':11,'font-weight':800},svg);t.textContent=label;contactLabels.push({text:t,leader});
+  }
+ }
  const text=document.createElement('p');text.className='demo-caption';container.append(text);let raf=null,elapsed=0,last=null,running=false;
- function draw(){const f=sample(guide,(elapsed/1000/guide.seconds)%1),p=f.points;[[farArm,[1,7,8]],[farLeg,[2,9,10]],[arm,[1,3,4]],[leg,[2,5,6]]].forEach(([node,indices])=>node.setAttribute('points',indices.map(i=>p[i].join(',')).join(' ')));[[trunk,1,2],[neck,0,1]].forEach(([node,a,b])=>{node.setAttribute('x1',p[a][0]);node.setAttribute('y1',p[a][1]);node.setAttribute('x2',p[b][0]);node.setAttribute('y2',p[b][1])});head.setAttribute('cx',p[0][0]);head.setAttribute('cy',p[0][1]);text.textContent=f.caption}
+ function draw(){const f=sample(guide,(elapsed/1000/guide.seconds)%1),p=f.points;[[farArm,[1,7,8]],[farLeg,[2,9,10]],[arm,[1,3,4]],[leg,[2,5,6]]].forEach(([node,indices])=>node.setAttribute('points',indices.map(i=>p[i].join(',')).join(' ')));[[trunk,1,2],[neck,0,1]].forEach(([node,a,b])=>{node.setAttribute('x1',p[a][0]);node.setAttribute('y1',p[a][1]);node.setAttribute('x2',p[b][0]);node.setAttribute('y2',p[b][1])});head.setAttribute('cx',p[0][0]);head.setAttribute('cy',p[0][1]);
+ const h=p[0],v=guide.face,front=guide===guides.side,perp=[-v[1],v[0]];
+ const point=(forward,side)=>[h[0]+v[0]*forward+perp[0]*side,h[1]+v[1]*forward+perp[1]*side];
+ if(front){nose.setAttribute('d','M'+(h[0]-1)+' '+(h[1]-1)+' l-2 5 h5');eye.setAttribute('cx',h[0]-5);eye.setAttribute('cy',h[1]-3);secondEye.setAttribute('cx',h[0]+5);secondEye.setAttribute('cy',h[1]-3);secondEye.setAttribute('visibility','visible');hair.setAttribute('d','M'+(h[0]-10)+' '+(h[1]-8)+' Q'+h[0]+' '+(h[1]-18)+' '+(h[0]+10)+' '+(h[1]-8));mouth.setAttribute('d','M'+(h[0]-4)+' '+(h[1]+7)+' q4 3 8 0')}
+ else{nose.setAttribute('d','M'+point(10,-4).join(' ')+' L'+point(18,0).join(' ')+' L'+point(10,4).join(' '));const e=point(7,-4);eye.setAttribute('cx',e[0]);eye.setAttribute('cy',e[1]);secondEye.setAttribute('visibility','hidden');hair.setAttribute('d','M'+point(-2,-12).join(' ')+' Q'+point(-20,0).join(' ')+' '+point(-2,12).join(' '));mouth.setAttribute('d','M'+point(10,6).join(' ')+' L'+point(8,9).join(' '))}
+ const chestVector=front?[0,1]:v;chest.setAttribute('cx',p[1][0]+(p[2][0]-p[1][0])*.25+chestVector[0]*8);chest.setAttribute('cy',p[1][1]+(p[2][1]-p[1][1])*.25+chestVector[1]*8);
+ if(contactLabels.length){const kneesDown=p[5][1]>176,x=kneesDown?p[5][0]:296;contactLabels[1].text.textContent=kneesDown?'KNEES DOWN':'TOES';contactLabels[1].text.setAttribute('x',x);contactLabels[1].leader.setAttribute('d','M'+x+' 190 V201')}
+ text.textContent=f.caption}
  function tick(now){if(!running)return;if(last!==null)elapsed+=Math.min(now-last,100);last=now;draw();raf=requestAnimationFrame(tick)}
  function pause(user=true){running=false;last=null;cancelAnimationFrame(raf);raf=null}
  function play(){if(running)return;running=true;last=null;raf=requestAnimationFrame(tick)}
