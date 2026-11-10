@@ -39,3 +39,6 @@ Publishing is pending account choice and approval. No public URL exists for this
 
 ## Audio diagnostic update — release 5
 Explicit Test voice control, local English voice preference, retained utterance, paused-engine resume, and visible start/error/timeout status. Mock-engine tests passed for these paths. This is a candidate fix, not confirmed audible on iPhone. Upload speech.js in addition to the existing files. Keep the same URL and local storage. No data reset required.
+
+## Voice selection update — release 6
+Adds English voice selection with preview and remembered device-local preference. Automatic selection prefers voices labeled Premium/Enhanced when exposed by the browser. Uses normal speaking rate. Manual selection falls back to automatic if unavailable. Voice availability/quality is device-dependent; no claim of natural voice quality until previewed on the physical phone. Silent Mode must be off on the tested parent iPhone. Tests passed for selection, fallback and asynchronously updated voice lists.
