@@ -5,6 +5,8 @@
  const D=root.StrengthDemos, vectorMount=D.mount, vectorFind=D.find;
  const base='https://firebasestorage.googleapis.com/v0/b/personalfinanceai-cursor.appspot.com/o/trainai%2Fcreator-media%2F2026-10-07%2Ftrainai-';
  const rows={
+  floor:['push-up','5d1917138ec8dbbe','5ffaa42b-b340-4299-b808-b9994c93f8d4','b8f7cb6081c4e489','d8980cfc-14f5-4cc5-9a37-4b10c6d93e43','Five controlled repetitions. Use your approved easier incline if you cannot keep good form.'],
+  sit:['legacy-0001','c83aea04e779fc20','e826ce9a-dc55-4d4b-9050-0f38a72ce365','842e2208abd0bb1b','0d4fc44d-b693-4cfa-8fc9-eaed7f87f6e9','This is a three-quarter sit-up: rise partway, without jerking or pulling your head. Complete five at your own pace.'],
   incline:['incline-push-up','a03ba47f092cb4ed','e8cfeef9-4496-4f35-84c8-3aa7bfc7644c','be1ad2c34a0740a5','85fffaa4-6436-4cfd-8ce7-55318f424767','The example uses a low bench. Use your parent-approved fixed counter height.'],
   bird:['bird-dog','6f8a94d442daab42','1a195498-13b9-49ef-b2d0-2a70452ee899','f4bade85d9734516','6300647f-0d7d-4c42-8eca-9c3b0882ec7a','The example shows one side. Reach the opposite arm and leg; do both sides as instructed.'],
   squat:['bodyweight-squat','c167c10f91fad22e','4b62cfe3-d8d6-404c-bd0b-07e4e6c1d223','cf9c676bd4a83c60','18ab757f-24c1-49b6-b196-a70870ac5463','Your squat can be shallower than the example. Use a comfortable range with heels down.'],
@@ -16,6 +18,7 @@
  };
  let playbackSequence=0;
  const media={};for(const [id,r] of Object.entries(rows))media[id]={page:'https://www.trainaiapp.com/exercises/'+r[0]+'/',gif:base+r[0]+'-'+r[1]+'.gif?alt=media&token='+r[2],poster:base+r[0]+'-'+r[3]+'.png?alt=media&token='+r[4],note:r[5]};
+ media.sit.page='https://www.trainaiapp.com/exercises/three-quarter-sit-up/';
  function entry(exercise){const guide=vectorFind(exercise);return Object.entries(D.guides).find(([,g])=>g===guide)?.[0]||null}
  D.find=function(exercise){const g=vectorFind(exercise),m=media[entry(exercise)];return g&&m?{...g,view:'TrainAI · online demonstration',media:m}:g};
  D.media=media;
@@ -33,7 +36,7 @@
   const basic=create('button','secondary','Use offline guide');basic.type='button';
   stage.append(poster,image,still);container.append(stage,status,note,source,basic);
   function release(){image.onload=null;image.onerror=null;image.removeAttribute('src');clearTimeout(timeout)}
-  function offline(message){if(destroyed||fallback)return;const wanted=playing;playing=false;generation++;clearTimeout(timeout);release();container.replaceChildren();const body=create('div');container.append(create('p','small',message),body);fallback=vectorMount(body,exercise);options.onSourceChange?.('Offline guide · '+vectorFind(exercise).view);if(wanted)fallback.play();notify()}
+  function offline(message){if(destroyed||fallback)return;const wanted=playing;playing=false;generation++;clearTimeout(timeout);release();container.replaceChildren();const body=create('div');container.append(create('p','small',message),body);fallback=vectorMount(body,exercise);options.onSourceChange?.('Offline guide · '+vectorFind(exercise).view,!!vectorFind(exercise).textOnly);if(wanted)fallback.play();notify()}
   basic.onclick=()=>offline('Offline guide selected. The online TrainAI example needs an internet connection.');
   poster.onerror=()=>{if(!destroyed&&!fallback)status.textContent='Setup picture unavailable. Tap Play to try the animation, or use the offline guide.'};
   function pause(){if(fallback){fallback.pause();notify();return}if(destroyed)return;playing=false;generation++;
@@ -51,6 +54,6 @@
   function replay(){if(fallback){fallback.replay();notify();return}pause();play()}
   function visibility(){if(document.hidden)pause()}
   document.addEventListener('visibilitychange',visibility);
-  return {guide:D.find(exercise),play,pause,replay,isPlaying:()=>fallback?fallback.isPlaying():playing,destroy(){destroyed=true;playing=false;generation++;clearTimeout(timeout);release();fallback?.destroy();document.removeEventListener('visibilitychange',visibility);container.replaceChildren()}};
+  return {guide:D.find(exercise),get staticOnly(){return !!fallback?.guide.textOnly},play,pause,replay,isPlaying:()=>fallback?fallback.isPlaying():playing,destroy(){destroyed=true;playing=false;generation++;clearTimeout(timeout);release();fallback?.destroy();document.removeEventListener('visibilitychange',visibility);container.replaceChildren()}};
  };
 })(typeof globalThis!=='undefined'?globalThis:this);

@@ -1,70 +1,45 @@
-# Ryan’s Strength Challenge — release 13
-Prepared November 13, 2026. TrainAI online demonstration integration.
+# Ryan’s Strength Challenge — release 14
+Prepared November 13, 2026.
 
-## This build
-All eight established beginner movements now have an online TrainAI demonstration in the exercise preview: incline push-ups, bird dogs, easy bodyweight squats, forearm plank, dead bugs, supported single-leg balance, side plank from bent knees, and reverse lunges.
+## Five push-ups and five sit-ups on each workout day
+Adds one set of five floor push-ups and one set of five **three-quarter sit-ups** to each Monday, Tuesday and Thursday workout. No extra workout or mini-session is added on Wednesday, Friday or ski weekends. Existing incline push-ups stay in the plan at their previously approved target.
 
-The new file is **media-demos.js**. It loads the provider’s unmodified, branded GIFs and static setup pictures from their public hosted URLs and links each demonstration to its official TrainAI exercise page. There are no downloaded provider images in this ZIP, no new account, subscription, analytics script, or payment. A direct image request sends the ordinary network information required to retrieve a file; image requests omit the referrer. Source-page links open the provider’s own website, which has its own notices and policies.
+Default exercise order:
+- Monday: **Sit-ups (three-quarter) ×5** → incline push-ups → bird dogs → easy squats → **floor push-ups ×5** → forearm plank.
+- Tuesday: dead bugs → forearm plank → bird dogs → **floor push-ups ×5** → **sit-ups (three-quarter) ×5** → single-leg balance → side plank from knees.
+- Thursday: incline push-ups → **sit-ups (three-quarter) ×5** → reverse lunges → bird dogs → **floor push-ups ×5** → side plank from knees.
 
-**Rights status:** TrainAI’s public download access and branding guidance were verified, but an explicit license for use inside a separate app remains unconfirmed. Remote image loading does not itself settle that permission question. This is an integration/review candidate, not a claim that provider licensing has been resolved. No provider has been contacted or paid. Do not rehost or bundle the provider’s files as an asset library. Source: https://www.trainaiapp.com/exercise-media/ and https://www.trainaiapp.com/terms-condition-1/ .
+The new floor push-ups do not immediately follow incline push-ups. The sit-ups have pushing or standing movements next to them. Existing core exercises can still follow each other in Tuesday’s core-focused session. Normal rest remains between different exercises.
 
-## Preserved exercise behavior
-- Preview before each exercise, set and timed side. Watching never starts the exercise timer or earns completion. Tap **Start exercise** when ready.
-- Repetition exercises remain self-paced. Demo motion does not set the exercise cadence.
-- Hold demonstrations show setup, hold and release. Ryan holds his own position until his actual exercise timer ends, rather than copying repeated lifts in a looping demonstration.
-- **Show exercise demonstrations** remains enabled by default and remembered on this device. Disabling it does not automatically start the current preview.
-- **View demo** remains available even with automatic previews disabled. It pauses a running hold and preserves its remaining time.
-- Pause animation freezes the current image; Play starts the short loop again. Replay restarts the GIF from a fresh request. Animation playback does not automatically resume after backgrounding.
-- Reduce Motion starts on a static setup picture; animation waits for an explicit Play tap.
-- The example’s incline push-up uses a bench. Ryan’s cue explicitly retains his approved sturdy fixed counter height. Squat depth remains comfortable and may be shallower than the demonstration.
-- Several loops demonstrate one side only. Follow the approved targets and Side 1 / Side 2 instructions; do both sides as directed.
-- The set uses male and female characters. It is not one identical coach for all eight.
-- Unknown custom exercise names still ask for a parent demonstration. An explicitly named floor push-up retains its existing offline guide; no incline clip is substituted for it.
+The matching online previews use the same branded TrainAI source as release 13. The sit-up is explicitly a controlled partial/three-quarter sit-up, not a full upright sit-up. If its online image cannot load, the fallback shows written technique cues and asks for a parent demonstration rather than inventing an unsupported animation. Floor push-ups have the existing original offline guide. Reduce Motion, pause/replay, preview-before-start and the remembered demo preference remain.
 
-## Offline and failure behavior
-The workout app and original vector guides remain offline-capable after installation. The new TrainAI images need internet. They are not added to the service-worker offline cache.
+Five means **five total once per workout**, not five extra sets or five per side. The new exercises remain self-paced. Use the approved easier push-up incline if floor form slips; no max-effort testing.
 
-If an animation fails or takes more than 12 seconds to load, the existing local guide appears with a clear message. **Use offline guide** also selects it immediately. Start, Back, Skip and Stop remain usable during loading. Late image callbacks cannot replace a subsequent step after navigation or closing the workout. Media requests stop when the preview is destroyed.
+## Existing devices update automatically without resetting records
+New file: **workout-additions.js**. It upgrades current plans once on opening the updated app and upgrades old backups on import. The marker is stored in the same progress backup, so future reloads and restores do not repeatedly add exercises. Later parent edits remain editable and are not reset. Original exercise values are preserved; completed and partial session snapshots, results, PIN, personal bests, practice/official separation and cycle dates stay unchanged.
 
-## Plans and stored data
-No changes to the core workout plans, targets, revision schema, localStorage keys, PIN, backup format or history. The app still uses `ryanStrengthV3`; demo preference still uses `ryanStrengthDemosV1`. Existing records retain their plan snapshots. Preferences and progress do not sync across phones.
+A recorded practice session stays recorded after the plan update. Use an unrecorded practice day/week to test the new flow. This update does not clear completions or retroactively require additions in historical records.
 
-The original youth core/calisthenics requirements remain: parent-supervised comfortable practice, no weights or appearance goals, no automatic progression by date, 39 Mon/Tue/Thu sessions across 13 scheduled weeks, official start November 16, 2026, last scheduled session February 11, 2027, and day 90 February 13, 2027. Practice and official completions remain separate. Wednesday/Friday are rest days; weekends are skiing.
+Heavily customized plans must have room within the existing 12-exercise limit. If they do not, the app preserves the existing plan and displays a parent-review notice. Custom exercise spacing is chosen from its names; parent review is needed for unusual names or variations.
 
-## Verification completed
-- `node ryan-strength-tests/demos.test.cjs`: full Monday, Tuesday and Thursday practice flows with the new renderer loaded; no timer/completion during preview; user-paced repetitions; hold refresher preserves remaining time; skip/partial behavior; remembered demo preference; Reduce Motion; unknown-name fallback; previous official history unchanged; backup-schema validation.
-- `node ryan-strength-tests/media.test.cjs`: all eight media mappings; static initial state; direct-image playback; freeze/pause; fresh replay URL; visibility/destroy cleanup; late callbacks ignored; network failure, timeout, offline and manual fallback; provider files absent from precache.
-- All app JavaScript passes syntax checks. Every precached app-shell path exists.
-- All 16 source URLs (eight GIFs plus eight static pictures) returned HTTP 200 and image content. Downloaded GIF SHA-256 values match the provider catalog names. Test retrievals were not bundled into this package.
-- Chrome: actual incline demonstration rendered inside the app. Pause froze a canvas frame, replay reloaded animation, Start led to **Your pace**, View demo reopened the preview, and manual offline fallback displayed the local guide. Reviewed at 393-pixel iframe width with sticky Start/Back controls.
+## Test status
+Passed additions-specific tests for all three days, spacing, exactly five repetitions once, retained parent edits, unchanged PIN/history/snapshots, one-time migration, old-backup import, duplicate prevention and self-paced completion. Full Mon/Tue/Thu guided-flow regression and media lifecycle/fallback tests passed. All JavaScript syntax and precache paths checked.
 
-These checks do not establish physical iPhone compatibility. This build has not been uploaded to the live GitHub Pages site. Neither phone has tested this release yet, and Ryan still needs a supervised practice session with the new examples.
+Release 13’s eight animations were reported working on both iPhones by the parent. Release 14 is a new candidate and still needs upload plus phone testing. It is not published by this package alone.
 
-## Updating the existing GitHub Pages app
-Preserve the existing site address. Do not clear browser data or delete the installed app as an update procedure.
+## Updating GitHub Pages
+1. Export a fresh backup on each phone before updating.
+2. Upload all **14 files inside ryan-strength-app** to the existing repository root, replacing matching files. Include **workout-additions.js**. Do not upload the enclosing folder or tests.
+3. Commit and wait for the newest Pages deployment to turn green.
+4. Finish any active workout. Open the installed app online on its dashboard, then close/reopen after the update arrives. A second reopen may be needed. Look for **App release 14 · 5 push-ups + 5 sit-ups each workout**.
+5. Check each day’s exercise list for both five-repetition additions and preserved original targets. Select an unrecorded practice session to test the new previews.
+6. Repeat on Ryan’s phone. Devices remain independent; a plan change on one phone does not sync to another.
 
-1. Export a fresh backup on each phone.
-2. Download/unzip this package. The upload folder is **ryan-strength-app**.
-3. Upload all **13 files inside that folder** to the existing repository root, replacing matching files. Include the new **media-demos.js**. Do not upload the enclosing folder, tests, or the old isolated side-plank preview.
-4. Commit and wait for the newest Pages deployment to turn green.
-5. Finish any running workout. Open the installed app online on the dashboard to receive the update, then close/reopen it. A second close/reopen may be needed for already loaded code. Dashboard footer: **App release 13 · TrainAI online demonstrations**.
-6. Start practice and confirm the first exercise shows the new character before its timer starts. Check both phones separately.
+Keep the same hosting address. Do not delete the app or clear browser data to update. Worker cache: `ryan-strength-release-14-workout-additions-1`.
 
-The worker cache is `ryan-strength-release-13-trainai-1`. It installs the complete shell before activation and does not rewrite localStorage or reload an ongoing workout.
+## Preserved requirements and limits
+The 39-session Mon/Tue/Thu calendar, November 16 official start, February 11 final scheduled session and February 13 day 90 remain. No automatic progression, weights, appearance metrics, account or subscription. Parent supervision and comfortable controlled technique remain essential. Repetitions are self-paced; backgrounding pauses timers. Local storage and the casual parent PIN have the same limits as before. Retain backups.
 
-## Phone acceptance checks
-- Confirm existing progress, PIN and plans remain present.
-- Start a practice workout. Let the actual warm-up run during exercise practice; bypass only for UI testing.
-- Confirm the preview shows the new character while the clock says **Ready when you are**.
-- Pause/replay the animation, then Start. Repetitions must say **Your pace**.
-- At a timed hold preview, wait longer than the hold duration; the hold must still have its full time when started.
-- Open View demo during a hold and confirm its remaining time is preserved.
-- Check both sides of knee side plank and supported balance with an adult.
-- Disable demos, reopen the app, and confirm the choice persists. Manual View demo must still work.
-- Try **Use offline guide** and an offline app launch after the shell has updated online.
-- Export/restore a backup only as a deliberate parent-approved test; restore replaces local records.
+Online TrainAI demonstrations require internet and remain externally hosted with branding/source links. They are not included in the ZIP or precached. The provider’s permission for reuse in a separate app remains unconfirmed; remote loading does not establish a license. No provider has been contacted or paid.
 
-## Remaining limits
-TrainAI reuse permission is unresolved. Online images depend on the provider keeping the URLs available. The older offline guides remain basic drawings. The images are short, native-resolution loops rather than HD follow-along videos. On iOS, keep Silent Mode off for speech; voice quality depends on available system voices. Keep the app open during exercise; backgrounding pauses timers. Local browser storage can be cleared or evicted, so retain backups. The parent PIN is a casual gate, not strong security.
-
-Historical release-12 implementation notes are retained under `ryan-strength-tests/Release_12_README.md`. The root `Side_Plank_Preview.html` is the OLD isolated vector preview, not this new integrated TrainAI player.
+Historical release-12 and release-13 notes are in the tests folder. The old isolated Side_Plank_Preview.html is a legacy vector preview, not the current media player.

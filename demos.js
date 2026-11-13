@@ -39,10 +39,11 @@ const orientations={
  lunge:{orientation:'STANDING · LOOK FORWARD',setup:'Stand upright. The drawing shows a side view of your steps.',face:[-1,0]}
 };
 for(const [id,details] of Object.entries(orientations))Object.assign(guides[id],details);
-const names={'incline push-ups':'incline','incline or floor push-ups':'incline','floor push-ups':'floor','bird dogs':'bird','bird dog':'bird','bodyweight squats':'squat','easy squats':'squat','forearm plank':'plank','dead bugs':'bug','dead bug':'bug','single-leg balance':'balance','side plank from knees':'side','reverse lunges':'lunge'};
+guides.sit={title:'Three-quarter sit-up',view:'Parent-guided setup',textOnly:true,cues:['Lie on your back with knees bent and feet flat.','Curl partway toward sitting without pulling your head.','Lower slowly; stop for discomfort.']};
+const names={'incline push-ups':'incline','incline or floor push-ups':'incline','floor push-ups':'floor','bird dogs':'bird','bird dog':'bird','bodyweight squats':'squat','easy squats':'squat','forearm plank':'plank','dead bugs':'bug','dead bug':'bug','single-leg balance':'balance','side plank from knees':'side','reverse lunges':'lunge','sit-ups (three-quarter)':'sit','three-quarter sit-ups':'sit'};
 function find(exercise){return guides[names[String(exercise.name).trim().toLowerCase()]]||null}
 function sample(guide,progress){const t=Math.max(0,Math.min(1,progress));let i=0;while(i<guide.frames.length-2&&t>=guide.frames[i+1][0])i++;const a=guide.frames[i],b=guide.frames[i+1],u=(t-a[0])/(b[0]-a[0]),ease=u*u*(3-2*u);return {points:a[1].map((p,j)=>p.map((v,k)=>v+(b[1][j][k]-v)*ease)),caption:a[2]}}
-function mount(container,exercise){const guide=find(exercise);container.replaceChildren();if(!guide)return null;const NS='http://www.w3.org/2000/svg';
+function mount(container,exercise){const guide=find(exercise);container.replaceChildren();if(!guide)return null;if(guide.textOnly){const p=document.createElement('p');p.className='demo-setup';p.textContent='Three-quarter sit-up: '+guide.cues.join(' ')+' Ask your parent to demonstrate this movement if the online animation is unavailable.';container.append(p);return {guide,play(){},pause(){},replay(){},isPlaying:()=>false,destroy:()=>container.replaceChildren()}}const NS='http://www.w3.org/2000/svg';
  function el(tag,attrs,parent){const node=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>node.setAttribute(k,v));parent.append(node);return node}
  const orientation=document.createElement('p');orientation.className='demo-orientation';orientation.textContent=guide.orientation;container.append(orientation);
  const setup=document.createElement('p');setup.className='demo-setup';setup.textContent=guide.setup;container.append(setup);
